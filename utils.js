@@ -9,7 +9,7 @@ export const items = [
 export const add = (a, b) => a + b;
 
 export const curry =
-  (f) =>
+  f =>
   (a, ..._) =>
     _.length ? f(a, ..._) : (..._) => f(a, ..._);
 
