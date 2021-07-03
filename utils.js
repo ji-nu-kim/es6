@@ -15,7 +15,10 @@ export const curry =
 
 export const map = curry((f, iter) => {
   let res = [];
-  for (const i of iter) {
+  iter = iter[Symbol.iterator]();
+  let cur;
+  while (!(cur = iter.next()).done) {
+    let i = cur.value;
     res.push(f(i));
   }
   return res;
@@ -23,8 +26,13 @@ export const map = curry((f, iter) => {
 
 export const filter = curry((f, iter) => {
   let res = [];
-  for (let i of iter) {
-    if (f(i)) res.push(i);
+  iter = iter[Symbol.iterator]();
+  let cur;
+  while (!(cur = iter.next()).done) {
+    let i = cur.value;
+    if (f(i)) {
+      res.push(i);
+    }
   }
   return res;
 });
@@ -33,8 +41,12 @@ export const reduce = curry((f, acc, iter) => {
   if (!iter) {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
+  } else {
+    iter = iter[Symbol.iterator]();
   }
-  for (let i of iter) {
+  let cur;
+  while (!(cur = iter.next()).done) {
+    let i = cur.value;
     acc = f(acc, i);
   }
   return acc;
@@ -45,3 +57,24 @@ export const pipe =
   (f, ...fs) =>
   (...as) =>
     go(f(...as), ...fs);
+
+export const range = n => {
+  let i = -1;
+  let res = [];
+  while (++i < n) {
+    res.push(i);
+  }
+  return res;
+};
+
+export const take = curry((n, iter) => {
+  let res = [];
+  iter = iter[Symbol.iterator]();
+  let cur;
+  while (!(cur = iter.next()).done) {
+    let i = cur.value;
+    res.push(i);
+    if (res.length === n) return res;
+  }
+  return res;
+});
