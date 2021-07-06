@@ -78,3 +78,31 @@ export const take = curry((n, iter) => {
   }
   return res;
 });
+
+export const L = {};
+
+L.range = function* (n) {
+  let i = -1;
+  while (++i < n) {
+    yield i;
+  }
+};
+L.map = curry(function* (f, iter) {
+  iter = iter[Symbol.iterator]();
+  let cur;
+  while (!(cur = iter.next()).done) {
+    let i = cur.value;
+    yield f(i);
+  }
+});
+L.filter = curry(function* (f, iter) {
+  iter = iter[Symbol.iterator]();
+  let cur;
+  while (!(cur = iter.next()).done) {
+    let i = cur.value;
+    if (f(i)) yield i;
+  }
+});
+L.entries = function* (obj) {
+  for (const k in obj) yield [k, obj[k]];
+};

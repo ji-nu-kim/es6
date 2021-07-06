@@ -1,28 +1,4 @@
-import { add, reduce, go, range, take, map, filter, curry } from './utils.js';
-
-const L = {};
-L.range = function* (n) {
-  let i = -1;
-  while (++i < n) {
-    yield i;
-  }
-};
-L.map = curry(function* (f, iter) {
-  iter = iter[Symbol.iterator]();
-  let cur;
-  while (!(cur = iter.next()).done) {
-    let i = cur.value;
-    yield f(i);
-  }
-});
-L.filter = curry(function* (f, iter) {
-  iter = iter[Symbol.iterator]();
-  let cur;
-  while (!(cur = iter.next()).done) {
-    let i = cur.value;
-    if (f(i)) yield i;
-  }
-});
+import { go, range, take, map, filter, L } from './utils.js';
 
 console.time('');
 go(
